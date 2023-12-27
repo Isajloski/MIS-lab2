@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
-
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -28,15 +25,11 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: Clothes.clothes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
+                    // Кога ќе се кликне на една од елементите каде било прикажи го тој елемент на екран со помош на Display
                     onTap: ()=>{
                       Navigator.push(
                       context,
@@ -63,12 +57,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       )
                     },
+                    // Прикажи ја сликата на екран
                     leading: Image.network(
-                      Clothes.clothes[index].image, // Replace with your image URL
-                      width: 60, // Adjust image size here
+                      Clothes.clothes[index].image,
+                      width: 60,
                       height: 60,
                       fit: BoxFit.cover,
                     ),
+                    // Прикажи го името и цената
                     title: Text(Clothes.clothes[index].name),
                     subtitle: Text('Цена: \ ${Clothes.clothes[index].price} ден'),
                     trailing: Row(
@@ -77,10 +73,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {
-                            // Navigate to a new screen on edit button press
+                            // Оди во Edit и стави го во Navigator за даможе да се клике назат
                             Navigator.push(
                               context,
                               MaterialPageRoute(
+                                // Исто така испрати ги податоците за cloth кој ќе се едитира и индексот
                                 builder: (context) => Edit(
                                   cloth: Clothes.clothes[index],
                                   index: index,
@@ -89,12 +86,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             );
                           },
                         ),
+                        // Избриши го елементот од низата и испринтај кој индекс бил!
                         IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () {
                             Clothes.clothes.remove(Clothes.clothes[index]);
                             debugPrint('\n\n  Успешно е отстранет елементот со индекс : $index \n\n');
-
                           },
                         ),
                       ],
@@ -105,8 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
-
       ),
+      // Копче за додавање на нов елемент (облека)
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -123,9 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-
+// Widget за Додавање на нов елемент
 class Add extends StatelessWidget {
 
+  // Со помош на контролерите ние ги земаме податоците од формите
   final TextEditingController nameController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
@@ -134,42 +132,47 @@ class Add extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // во Title нека стои Create
       appBar: AppBar(
         title: Text('Create'),
       ),
       body: Center(
         child: Column(
           children: [
+            // Форма за името
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'Name',
                 ),
               ),
             ),
+            // форма за слика
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: imageController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'Image',
                 ),
               ),
             ),
+            // форма за цена
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: priceController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'Price'
                 ),
               ),
             ),
+            // форма за опис
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: descriptionController,
                 decoration: const InputDecoration(
@@ -180,9 +183,10 @@ class Add extends StatelessWidget {
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-
               child: TextButton(
+                // Кога ќе кликнеме на копчето Create
                 onPressed: () {
+                  // Провери дали сите полиња се потоплнети, доколку се направи нов обејкт и додади го во лисатата
                   if (nameController.text.isNotEmpty && imageController.text.isNotEmpty && priceController.text.isNotEmpty && descriptionController.text.isNotEmpty ){
                     int newPrice = int.tryParse(priceController.text) ?? 0;
 
@@ -203,10 +207,9 @@ class Add extends StatelessWidget {
                       fontSize: 20,
                       color: Colors.black
                   ),
-                ), // Placeholder text on the button
+                ),
               ),
             ),
-            // Add editing widgets or form fields here
           ],
         ),
       ),
@@ -214,19 +217,18 @@ class Add extends StatelessWidget {
   }
 }
 
-
+// Edit, буквално е исто како Add, затоа нема да го опишувам.
 class Edit extends StatelessWidget {
   final Cloth cloth;
   final int index;
 
+  // Кога се праќаат информациите се праќат и cloth и индекс, во спротивно нема да се прикаже Edit widget.
   Edit({Key? key, required this.cloth, required this.index}) : super(key: key);
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +240,7 @@ class Edit extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
               controller: nameController,
               decoration: InputDecoration(
@@ -248,7 +250,7 @@ class Edit extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: imageController,
                 decoration: InputDecoration(
@@ -258,7 +260,7 @@ class Edit extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: priceController,
                 keyboardType: TextInputType.number,
@@ -269,7 +271,7 @@ class Edit extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
                 controller: descriptionController,
                 decoration: InputDecoration(
@@ -312,10 +314,9 @@ class Edit extends StatelessWidget {
                       fontSize: 20,
                       color: Colors.black
                   ),
-                ), // Placeholder text on the button
+                ),
               ),
             ),
-            // Add editing widgets or form fields here
           ],
         ),
       ),
@@ -323,6 +324,7 @@ class Edit extends StatelessWidget {
   }
 }
 
+// Widget Dispaly, ја прикажува сликата на екран и информациите за тој елемент.
 class Display extends StatelessWidget {
   final Cloth cloth;
 
@@ -337,6 +339,7 @@ class Display extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
+            // Прикажи ја сликата со 500 висина и дебелина
             Image.network(cloth.image, height: 550, width: 500),
             Text(
               cloth.name,
@@ -352,7 +355,7 @@ class Display extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20), // Adjust the horizontal padding as needed
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
               cloth.description,
               style: const TextStyle(
@@ -369,7 +372,7 @@ class Display extends StatelessWidget {
   }
 }
 
-
+// Во Cloth ги чуваме податоците за секој елемент на облеката, имаме име, цена, слика и опис.
 class Cloth {
   String image;
   int price;
@@ -384,6 +387,7 @@ class Cloth {
   });
 }
 
+// Тука ги чуваме податоците за облеката.
 class Clothes{
   static List<Cloth> clothes = [
     Cloth(
